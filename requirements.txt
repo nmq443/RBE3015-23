@@ -1,4 +1,5 @@
 torch
+ultralytics
 PyQt5
 opencv-python
 pyqt5-tools

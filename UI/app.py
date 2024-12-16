@@ -1,19 +1,21 @@
 import sys
 import cv2
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QPixmap, QImage
-from appHandle import appHandle
+from UI.appHandle import appHandle
 from ultralytics import YOLO
+from source.object_counter import ObjectCounter
 
-model = YOLO('../ai/yolov8n.pt')
 
 class APP(QMainWindow):
-    def __init__(self):
+    def __init__(self, object_counter: ObjectCounter):
         super().__init__()
         self.mainUi = QMainWindow()
         self.mainHandle = appHandle(self.mainUi)
         self.mainUi.show()
+        
+        self.object_counter = object_counter
 
         self.stream()
 
@@ -22,7 +24,7 @@ class APP(QMainWindow):
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(30)
 
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(cv2.CAP_DSHOW)
         if not self.cap.isOpened():
             print("Cannot open camera")
             return
@@ -33,19 +35,30 @@ class APP(QMainWindow):
             print("Cannot read camera")
             return
 
-        results = model.predict(frame)
-        frame = results[0].plot()
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-        # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        height, width, num_channels = frame.shape
-        bytesPerLine = width
-        qimage = QImage(frame.data, width, height, bytesPerLine, QImage.Format_Grayscale8)
+        frame = self.object_counter.count_objects(frame)
+
+        height, width, channel = frame.shape
+        bytesPerLine = channel * width
+
+        qimage = QImage(frame.data, width, height, bytesPerLine, QImage.Format_RGB888)
+
         pixmap = QPixmap.fromImage(qimage)
+        pixmap = pixmap.scaled(
+            self.mainHandle.Image_stream.width(),
+            self.mainHandle.Image_stream.height(),
+            Qt.KeepAspectRatio
+        )
+        
+
         self.mainHandle.Image_stream.setPixmap(pixmap)
+        self.show_number_compoment()
 
     def show_number_compoment(self):
         #set  self.mainHandle.lbl_number.setText() the number of the compoment in the board
-        pass
+        self.mainHandle.lbl_number.setText(f"{self.object_counter.total_objects}")
+        
 
     def show_bbox_compoment(self):
         # Draw in frame the bbox of the compoment in the board
@@ -57,6 +70,10 @@ class APP(QMainWindow):
         event.accept()
 
 if __name__ == '__main__':
+    # weight_path = '../weights/best.pt'
+    weight_path = '../weights/yolov8n.pt'
+    model = YOLO(weight_path)
+    object_counter = ObjectCounter(model=model)
     app = QApplication(sys.argv)
-    ui = APP()
+    ui = APP(object_counter=object_counter)
     sys.exit(app.exec_())
