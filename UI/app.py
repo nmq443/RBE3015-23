@@ -4,6 +4,9 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QPixmap, QImage
 from appHandle import appHandle
+from ultralytics import YOLO
+
+model = YOLO('../ai/yolov8n.pt')
 
 class APP(QMainWindow):
     def __init__(self):
@@ -30,8 +33,11 @@ class APP(QMainWindow):
             print("Cannot read camera")
             return
 
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        height, width = frame.shape
+        results = model.predict(frame)
+        frame = results[0].plot()
+
+        # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        height, width, num_channels = frame.shape
         bytesPerLine = width
         qimage = QImage(frame.data, width, height, bytesPerLine, QImage.Format_Grayscale8)
         pixmap = QPixmap.fromImage(qimage)
