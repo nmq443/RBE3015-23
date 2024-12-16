@@ -1,12 +1,14 @@
 import sys
 import cv2
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QPixmap, QImage
 from appHandle import appHandle
 from ultralytics import YOLO
+from source.model import Model
 
-model = YOLO('../ai/yolov8n.pt')
+model = YOLO('../source/yolov8n.pt')
+m = Model(model=model)
 
 class APP(QMainWindow):
     def __init__(self):
@@ -33,19 +35,30 @@ class APP(QMainWindow):
             print("Cannot read camera")
             return
 
-        results = model.predict(frame)
-        frame = results[0].plot()
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-        # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        height, width, num_channels = frame.shape
-        bytesPerLine = width
-        qimage = QImage(frame.data, width, height, bytesPerLine, QImage.Format_Grayscale8)
+        frame = m.count_objects(frame)
+
+        height, width, channel = frame.shape
+        bytesPerLine = channel * width
+
+        qimage = QImage(frame.data, width, height, bytesPerLine, QImage.Format_RGB888)
+
         pixmap = QPixmap.fromImage(qimage)
+        pixmap = pixmap.scaled(
+            self.mainHandle.Image_stream.width(),
+            self.mainHandle.Image_stream.height(),
+            Qt.KeepAspectRatio
+        )
+        
+
         self.mainHandle.Image_stream.setPixmap(pixmap)
+        self.show_number_compoment()
 
     def show_number_compoment(self):
         #set  self.mainHandle.lbl_number.setText() the number of the compoment in the board
-        pass
+        self.mainHandle.lbl_number.setText(f"{m.total_objects}")
+        
 
     def show_bbox_compoment(self):
         # Draw in frame the bbox of the compoment in the board
