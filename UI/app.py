@@ -24,7 +24,7 @@ class APP(QMainWindow):
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(30)
 
-        self.cap = cv2.VideoCapture(cv2.CAP_DSHOW)
+        self.cap = cv2.VideoCapture(1)
         if not self.cap.isOpened():
             print("Cannot open camera")
             return
@@ -70,8 +70,8 @@ class APP(QMainWindow):
         event.accept()
 
 if __name__ == '__main__':
-    # weight_path = '../weights/best.pt'
-    weight_path = '../weights/yolov8n.pt'
+    weight_path = '../weights/best.pt'
+    # weight_path = '../weights/yolov8n.pt'
     model = YOLO(weight_path)
     object_counter = ObjectCounter(model=model)
     app = QApplication(sys.argv)
