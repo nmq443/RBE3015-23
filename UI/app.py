@@ -6,7 +6,7 @@ from PyQt5.QtGui import QPixmap, QImage
 from app_handle import app_handle
 from ultralytics import YOLO
 from serial_arduino import *
-model = YOLO('/home/hoang/xla/RBE3015-23/UI/best.pt')
+model = YOLO('best.pt')
 
 
 class App(QMainWindow):
