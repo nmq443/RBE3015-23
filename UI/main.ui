@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>921</width>
-    <height>669</height>
+    <width>1026</width>
+    <height>763</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>270</y>
-      <width>381</width>
-      <height>281</height>
+      <y>260</y>
+      <width>421</width>
+      <height>311</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -35,7 +35,7 @@
      <rect>
       <x>120</x>
       <y>80</y>
-      <width>591</width>
+      <width>711</width>
       <height>81</height>
      </rect>
     </property>
@@ -57,20 +57,20 @@ font: 57 20pt &quot;Ubuntu&quot;;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: solid 10px;</string>
+     <string notr="true">background-color: rgb(255, 255, 127);
+border-radius:  10px;</string>
     </property>
     <property name="text">
      <string>Camera</string>
     </property>
    </widget>
-   <widget class="QTableWidget" name="lbl_compoment_table">
+   <widget class="QTableWidget" name="compoment_table">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>280</y>
-      <width>371</width>
-      <height>281</height>
+      <x>520</x>
+      <y>260</y>
+      <width>501</width>
+      <height>311</height>
      </rect>
     </property>
     <column>
@@ -98,7 +98,7 @@ border-radius: solid 10px;</string>
     <property name="geometry">
      <rect>
       <x>330</x>
-      <y>560</y>
+      <y>610</y>
       <width>111</width>
       <height>41</height>
      </rect>
@@ -113,8 +113,8 @@ border-radius: solid 10px;</string>
    <widget class="QLabel" name="logo_uet">
     <property name="geometry">
      <rect>
-      <x>760</x>
-      <y>20</y>
+      <x>850</x>
+      <y>40</y>
       <width>131</width>
       <height>131</height>
      </rect>
@@ -124,6 +124,23 @@ border-radius: solid 10px;</string>
     </property>
     <property name="text">
      <string>Logo Uet</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_check">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>200</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(170, 200, 189);
+border-radius:10px;</string>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>

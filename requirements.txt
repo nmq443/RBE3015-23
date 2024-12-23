@@ -4,3 +4,5 @@ opencv-python
 pyqt5-tools
 pandas
 numpy
+python-snap7
+ultralytics

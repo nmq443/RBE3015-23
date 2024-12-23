@@ -1,0 +1,6 @@
+torch
+PyQt5
+opencv-python
+pyqt5-tools
+pandas
+numpy
